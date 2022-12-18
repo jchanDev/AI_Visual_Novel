@@ -42,6 +42,16 @@ body {
   cursor: pointer;
 }
 
+.character-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+  width: 300px;
+  mix-blend-mode: multiply;
+  filter: contrast(1);
+}
+
 .character-name {
   /* Style the character name as desired */
   font-weight: bold;
