@@ -1,0 +1,21 @@
+/* CSS for styling the dialogue box */
+.dialogue-box {
+  width: 50%; /* Adjust this value to change the width of the box */
+  background-color: white; /* Change the background color as desired */
+  border: 1px solid black; /* Add a border if desired */
+  padding: 20px; /* Add some padding for aesthetics */
+  margin: 20px auto; /* Center the box on the page */
+  text-align: left; /* Align the text to the left */
+}
+
+.character-name {
+  /* Style the character name as desired */
+  font-weight: bold;
+  color: blue;
+}
+
+.dialogue-text {
+  /* Style the dialogue text as desired */
+  font-style: italic;
+  color: black;
+}
