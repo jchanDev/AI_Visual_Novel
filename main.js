@@ -10,15 +10,17 @@ const form = document.querySelector(".story-setup");
 //name, theme, charDesc, and goal are needed
 async function fetchStart(evt){
     evt.preventDefault();
-    const data = new URLSearchParams();
+    const params = new URLSearchParams();
     for (const [key, val] of new FormData(form)) {
-        data.append(key, val);
+        params.append(key, val);
     }
-    const response = await fetch('http://localhost:3000/start?' + data);
-    return response.json();
+    const response = await fetch('http://localhost:3000/start?' + params);
+    const data = await response.json();
+    console.log(data);
+    return data;
 }
-form.onsubmit = fetchStart;
 
+form.onsubmit = fetchStart;
 
 const openai = new OpenAIApi(configuration);
 
@@ -58,7 +60,7 @@ dialogue_box.addEventListener('click', async () => {
         document.querySelector('.character-name').innerHTML = name + ': ';
         //Display the character that is currently talking
         if (name !== 'AIVN') {
-            document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
+        document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
         }
         
         document.querySelector('.dialogue-text').innerHTML = '';

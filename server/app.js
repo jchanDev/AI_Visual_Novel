@@ -17,6 +17,18 @@ const api = new ChatGPTAPIBrowser({
 });
 await api.initSession();
 
+app.all("/start", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+app.all("/choose", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 async function parseResponse(response) {
   let dialogues = response.split("\n\n");
   let charImgs = {};
@@ -31,17 +43,23 @@ async function parseResponse(response) {
   const openai = new OpenAIApi(configuration);
   let bgUrl;
   if (bgPrompt) {
-    // const imgResult = await openai.createImage({
-    //   prompt: bgPrompt,
-    //   n: 1,
-    //   size: '1024x1024',
-    // });
-    bgUrl = "imgResult.data.data[0].url";
+    const imgResult = await openai.createImage({
+      prompt: bgPrompt,
+      n: 1,
+      size: "1024x1024",
+    });
+    bgUrl = imgResult.data.data[0].url;
   }
 
   let isProcessingChoices = false;
   for (let dialogue of dialogues) {
-    if (dialogue === "[CHOICES]") {
+    if (!dialogue.includes(": ")) {
+      continue;
+    }
+    if (dialogue.startsWith("[SCENE CHANGE]")) {
+      continue;
+    }
+    if (dialogue.startsWith("[CHOICES]") || dialogue.startsWith("[OPTIONS]")) {
       isProcessingChoices = true;
       continue;
     }
@@ -52,7 +70,7 @@ async function parseResponse(response) {
     }
     if (!isProcessingChoices) {
       const dialoguePts = [
-        ...dialogue.matchAll(/^\[(.*)\]( \((.*)\)){0,1}: (.*)$/gm),
+        ...dialogue.matchAll(/^\[{0,1}(.*?)\]{0,1}( \((.*?)\)){0,1}: (.*?)$/gm),
       ][0];
 
       let tempObj;
@@ -96,32 +114,29 @@ app.get("/start", async (req, res) => {
       req.query.charDesc +
       "  and his goal is " +
       req.query.goal +
-      " .You should only talk as the narrator in third person, or as the characters in first person. Before each of your responses, you must describe the physical appearance of the scene’s background using the format [BACKGROUND]: PHYSICAL APPEARANCE OF THE SCENE’S BACKGROUND. When a scene changes, write the text: [SCENE CHANGE]. I want you to write character dialogue in the format, [NAME]: “dialogue”. You must always describe the physical appearance of a character when they are speaking for the first time, using the format [NAME OF THE CHARACTER SPEAKING] (CHARACTER DESCRIPTION): “dialogue”. Write  [OPTIONS]: and then add another line. I want you to always prompt the text box with 3 choices in order to progress the story at the end of the scene. The choices should be presented in the format of a numbered list and alter the storyline. You must stop writing after options are given."
+      " .You should only talk as the narrator in third person, or as the characters in first person. Before each of your responses, you must describe the physical appearance of the scene's background using the format [BACKGROUND]: PHYSICAL APPEARANCE OF THE SCENE'S BACKGROUND. When a scene changes, write the text: [SCENE CHANGE]. I want you to write character dialogue in the format, [NAME]: “dialogue”. You must always describe the physical appearance of a character when they are speaking for the first time, using the format [NAME OF THE CHARACTER SPEAKING] (CHARACTER DESCRIPTION): “dialogue”. Write  [OPTIONS]: and then add another line. I want you to always prompt the text box with 3 choices in order to progress the story at the end of the scene. The choices should be presented in the format of a numbered list and alter the storyline. You must stop writing after options are given."
   );
 
-  //   const result = {
-  //     response: `[BACKGROUND]: The scene is set in a bustling marketplace in a fantasy kingdom. The sun is high in the sky, casting a warm glow on the colorful stalls and vendors shouting to attract customers.
+  // const result = {
+  //   response: `[BACKGROUND]: It is a beautiful, sunny day outside, with birds chirping and flowers blooming. The sky is a bright blue with a few wispy clouds scattered about.
 
-  // [Mateo] (a Chinese eccentric CS major with a playful glint in his eyes): "Wow, this place is amazing! So many sights and sounds, it's like a sensory overload. I wonder what kind of adventures I'll have here."
+  //   [SCENE CHANGE]
 
-  // [NARRATOR]: You see a group of merchants huddled together, whispering amongst themselves. One of them seems to be glancing in your direction.
+  //   [BACKGROUND]: Mateo is standing in front of his school, a large brick building with rows of windows and a flagpole out front. The sounds of laughter and chatter fill the air as students mill about, enjoying the warm weather.
 
-  // [CHOICES]
+  //   Mateo (a tall, outgoing young man with short, dark hair and a confident demeanor): "Man, I can't wait to get out of here. It's been a long week and I just want to relax and hang out with my friends."
 
-  // 1. Approach the merchants and ask what they're talking about.
-  // 2. Ignore them and continue browsing the stalls.
-  // 3. Go back to the inn and rest for the night.
-
-  // What do you choose to do, Mateo?`,
-  //     messageId: "msg",
-  //     conversationId: "conv"
-  //   }
+  //   [OPTIONS]:
+  //   1. "I think I'll go hit up the arcade."
+  //   2. "I'm in the mood for some shopping. I need to get a new outfit for the weekend."
+  //   3. "I think I'll just head home and chill for a bit."`,
+  //   messageId: "msg",
+  //   conversationId: "conv"
+  // }
 
   console.log(result.response);
 
-  const { parsedDialogue, choices, bgUrl, charImgs } = await parseResponse(
-    result.response
-  );
+  const { parsedDialogue, choices, bgUrl, charImgs } = await parseResponse(result.response);
 
   res.send(
     JSON.stringify({
