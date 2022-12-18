@@ -1,7 +1,20 @@
+/* CSS for styling the body */
+body {
+  background-image: url('/lud_background.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 /* CSS for styling the dialogue box */
 .dialogue-box {
-  width: 50%; /* Adjust this value to change the width of the box */
-  background-color: white; /* Change the background color as desired */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 50%; /* Adjust   q233434this value to change the width of the box */
+  background-color: rgba(0, 0, 0, 0.75); /* Change the background color as desired */
   border: 1px solid black; /* Add a border if desired */
   padding: 20px; /* Add some padding for aesthetics */
   margin: 20px auto; /* Center the box on the page */
@@ -11,11 +24,14 @@
 .character-name {
   /* Style the character name as desired */
   font-weight: bold;
-  color: blue;
+  color: rgb(105, 255, 253);
+  margin-top: 0;
+  font-size: 35px;
 }
 
 .dialogue-text {
   /* Style the dialogue text as desired */
-  font-style: italic;
-  color: black;
+  color: white;
+  font-size: 30px;
+  font-family: sans-serif;
 }
