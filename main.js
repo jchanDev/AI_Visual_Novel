@@ -46,15 +46,20 @@ dialogue_box.addEventListener('click', async () => {
     const res = await fetch("https://localhost:3000/start?name=Mateo&theme=xkfbkcck")
     const chatResponse = await res.json();
     const dialogue = chatResponse.dialogue;
-    for (let c of chatResponse.characterImages) {
-        characterImages[c[0]] = c[1];
+    for (let c of chatResponse[characterImages]) {
+        characterImages[c] = chatResponse[characterImages][c];
     }
 
     if (index < dialogue.length) {
         let name = dialogue[index][name];
+        if (name === 'NARRATOR') {
+            name = AIVN;
+        }
         document.querySelector('.character-name').innerHTML = name + ': ';
         //Display the character that is currently talking
-        document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
+        if (name !== 'AIVN') {
+            document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
+        }
         
         document.querySelector('.dialogue-text').innerHTML = '';
         let i = 0;
