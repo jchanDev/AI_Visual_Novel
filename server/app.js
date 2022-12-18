@@ -88,7 +88,7 @@ async function parseResponse(response) {
 app.get("/start", async (req, res) => {
   //name, theme, charDesc, and goal are needed
   const result = await api.sendMessage(
-    "I want you to act as a visual novel narrator and its characters with unique names. My name is " +
+    "I want you to act as a visual novel narrator and its characters with unique specific names. My name is " +
       req.query.name +
       " and I will be the main character in the story, and I should be able to interact with the other characters. The theme of the story will be:" +
       req.query.theme +
@@ -96,8 +96,9 @@ app.get("/start", async (req, res) => {
       req.query.charDesc +
       "  and his goal is " +
       req.query.goal +
-      " . You should only talk as the narrator in third person, or as the characters in first person. Before each of your responses, I want you to describe the physical appearance of the scene's background using the format [BACKGROUND]: PHYSICAL APPEARANCE OF THE SCENE’S BACKGROUND. I want you to write character dialogue in the format, [NAME]: “DIALOGUE”. You must always describe the physical appearance of a character when they are speaking for the first time, using the format [NAME OF CHARACTER] (CHARACTER DESCRIPTION): “DIALOGUE”. I want you to always give me 3 choices in order to progress the story once per scene. The choices should be presented in the format of a numbered list. Never choose the decision for me. Always ask me what choice I want to make, and I can only respond in the chat box with one of the options; it should alter the storyline. When a scene changes, write the text: [SCENE CHANGE]."
+      " .You should only talk as the narrator in third person, or as the characters in first person. Before each of your responses, you must describe the physical appearance of the scene’s background using the format [BACKGROUND]: PHYSICAL APPEARANCE OF THE SCENE’S BACKGROUND. When a scene changes, write the text: [SCENE CHANGE]. I want you to write character dialogue in the format, [NAME]: “dialogue”. You must always describe the physical appearance of a character when they are speaking for the first time, using the format [NAME OF THE CHARACTER SPEAKING] (CHARACTER DESCRIPTION): “dialogue”. Write  [OPTIONS]: and then add another line. I want you to always prompt the text box with 3 choices in order to progress the story at the end of the scene. The choices should be presented in the format of a numbered list and alter the storyline. You must stop writing after options are given."
   );
+
   //   const result = {
   //     response: `[BACKGROUND]: The scene is set in a bustling marketplace in a fantasy kingdom. The sun is high in the sky, casting a warm glow on the colorful stalls and vendors shouting to attract customers.
 
