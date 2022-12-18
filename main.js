@@ -1,8 +1,24 @@
 import { Configuration, OpenAIApi } from 'openai';
 
 const configuration = new Configuration({
-  apiKey: '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',
+    apiKey: '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',
 });
+
+console.log("HI!!!");
+
+const form = document.querySelector(".story-setup");
+//name, theme, charDesc, and goal are needed
+async function fetchStart(evt){
+    evt.preventDefault();
+    const data = new URLSearchParams();
+    for (const [key, val] of new FormData(form)) {
+        data.append(key, val);
+    }
+    const response = await fetch('http://localhost:3000/start?' + data);
+    return response.json();
+}
+form.onsubmit = fetchStart;
+
 
 const openai = new OpenAIApi(configuration);
 
