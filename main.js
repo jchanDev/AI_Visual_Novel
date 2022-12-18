@@ -4,8 +4,8 @@ let index = 0;
 const dialogue_box = document.querySelector('.dialogue-box');
 dialogue_box.addEventListener('click', () => {
     console.log('clicked');
-    document.querySelector('.dialogue-text').innerHTML = ''
     if (index < diff_dialog.length) {
+        document.querySelector('.dialogue-text').innerHTML = ''
         let i = 0;
         const interval = setInterval(function () {
 
