@@ -7,6 +7,25 @@ body {
   background-size: cover;
 }
 
+/* CSS for styling the options boxes */
+.options {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.options-box {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid black;
+  color: white;
+  padding: 10px;
+  margin: 30px;
+  cursor: pointer;
+  font-size: 50px
+}
+
 /* CSS for styling the dialogue box */
 .dialogue-box {
   position: fixed;
@@ -19,6 +38,7 @@ body {
   padding: 20px; /* Add some padding for aesthetics */
   margin: 20px auto; /* Center the box on the page */
   text-align: left; /* Align the text to the left */
+  cursor: pointer;
 }
 
 .character-name {

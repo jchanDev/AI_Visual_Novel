@@ -3,22 +3,23 @@ const diff_dialog = ["As Connor walked down the winding path, he couldn't help b
 let index = 0;
 const dialogue_box = document.querySelector('.dialogue-box');
 dialogue_box.addEventListener('click', () => {
-  console.log('clicked');
-  if (index < diff_dialog.length) {
-    document.querySelector('.dialogue-text').innerHTML = `<p>${diff_dialog[index]}</p`;
-    const words = diff_dialog[index].split(' ');
-    let i = 0;
-    const interval = setInterval(function() {
-        document.querySelector('.dialogue-text').innerHTML += `${words[i]} `;
-        i++;
+    console.log('clicked');
+    document.querySelector('.dialogue-text').innerHTML = ''
+    if (index < diff_dialog.length) {
+        let i = 0;
+        const interval = setInterval(function () {
 
-        if (i >= words.length) {
-            clearInterval(interval);
-        }
-    }, 125);
+            document.querySelector('.dialogue-text').innerHTML += `${diff_dialog[index][i]}`;
+            i++;
 
-    
-    index += 1;
-  }
+            if (i >= diff_dialog[index].length) {
+                clearInterval(interval);
+            }
+        }, 25);
+
+        index += 1;
+    } else {
+        document.querySelector('.options').style.display = "block";
+    }
 
 });
