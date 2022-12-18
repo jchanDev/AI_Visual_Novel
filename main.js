@@ -39,24 +39,38 @@ document.querySelector(".character").innerHTML = `<img class="character-img" alt
 const diff_dialog = ["As Connor walked down the winding path, he couldn't help but feel a sense of unease wash over him. The trees towered over him, their branches rustling in the wind as if they were trying to communicate some secret message. Connor's heart pounded in his chest as he tried to steady his breathing. He had never been one for adventure, but he had agreed to come on this quest with his friends", "As he approached the clearing, he saw three figures standing before him. One was a tall, muscular man with piercing green eyes and a sly grin on his face. The second was a petite woman with long, flowing blonde hair and a kind expression. The third was a hooded figure, their face obscured by the shadows of their cloak", "Connor had no idea who these people were or what they wanted, but he knew he had to be cautious. He scanned the area for any signs of danger, but everything seemed peaceful. He took a deep breath and stepped forward, determined to find out the truth."];
 
 let index = 0;
+let characterImages = {};
 const dialogue_box = document.querySelector('.dialogue-box');
-dialogue_box.addEventListener('click', () => {
+dialogue_box.addEventListener('click', async () => {
     console.log('clicked');
-    if (index < diff_dialog.length) {
-        document.querySelector('.dialogue-text').innerHTML = ''
+    const res = await fetch("https://localhost:3000/start?name=Mateo&theme=xkfbkcck")
+    const chatResponse = await res.json();
+    const dialogue = chatResponse.dialogue;
+    for (let c of chatResponse.characterImages) {
+        characterImages[c[0]] = c[1];
+    }
+
+    if (index < dialogue.length) {
+        let name = dialogue[index][name];
+        document.querySelector('.character-name').innerHTML = name + ': ';
+        //Display the character that is currently talking
+        document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
+        
+        document.querySelector('.dialogue-text').innerHTML = '';
         let i = 0;
         const interval = setInterval(function () {
 
-            document.querySelector('.dialogue-text').innerHTML += `${diff_dialog[index][i]}`;
+            document.querySelector('.dialogue-text').innerHTML += `${dialogue[index][text][i]}`;
             i++;
 
-            if (i >= diff_dialog[index].length) {
+            if (i >= dialogue[index][text].length) {
                 clearInterval(interval);
             }
         }, 25);
 
         index += 1;
     } else {
+        //display the option choices
         document.querySelector('.options').style.display = "block";
     }
 
