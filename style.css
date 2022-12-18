@@ -7,6 +7,47 @@ body {
   background-size: cover;
 }
 
+/* CSS for styling the prompt form */
+form {
+  margin-top: 200px;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+  width:200px;
+  padding:20px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.85);
+  font-size: 20px;
+  /* display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+}
+
+textarea {
+  padding: 10px;
+  margin:10px 0;
+  border:0;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  border-radius:10px;
+  width:80%;
+}
+
+input[type=submit] {
+  padding: 10px;
+  margin:10px 0;
+  border:0;
+  color: blue;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+  border-radius:10px;
+  width:95%;
+}
+
+.character {
+  display: none;
+}
+
 /* CSS for styling the options boxes */
 .options {
   display: none;
@@ -28,6 +69,7 @@ body {
 
 /* CSS for styling the dialogue box */
 .dialogue-box {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;

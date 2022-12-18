@@ -6,8 +6,18 @@
     <title>AI Visual Novel</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
-
   <body>
+    <form>
+      <label for="char-name">Name:</label>
+      <textarea id="char-name" name="char-name"></textarea>
+      <label for="theme">Theme:</label>
+      <textarea id="theme" name="theme"></textarea>
+      <label for="goal">Goal:</label>
+      <textarea id="goal" name="goal"></textarea>
+      <label for="char-des">Character Description:</label>
+      <textarea id="char-des" name="char-des"></textarea>
+      <input type="submit" value="Submit">
+    </form>
     <div class="character"></div>
     <div class="options">
       <div id="options-box-1" class="options-box">Option 1</div>
