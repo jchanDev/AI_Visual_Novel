@@ -13,7 +13,7 @@ const api = new ChatGPTAPIBrowser({
   email: OPENAI_EMAIL,
   password: OPENAI_PASSWORD,
   isGoogleLogin: true,
-  executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+  // executablePath: "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
 })
 
 app.get('/start', async (req, res) => {
@@ -24,17 +24,17 @@ app.get('/start', async (req, res) => {
   const result = {
     response: `[BACKGROUND]: The scene is set in a bustling marketplace in a fantasy kingdom. The sun is high in the sky, casting a warm glow on the colorful stalls and vendors shouting to attract customers.
 
-    [Mateo] (a Chinese eccentric CS major with a playful glint in his eyes): "Wow, this place is amazing! So many sights and sounds, it's like a sensory overload. I wonder what kind of adventures I'll have here."
-    
-    [NARRATOR]: You see a group of merchants huddled together, whispering amongst themselves. One of them seems to be glancing in your direction.
-    
-    [CHOICES]
-    
-    1. Approach the merchants and ask what they're talking about.
-    2. Ignore them and continue browsing the stalls.
-    3. Go back to the inn and rest for the night.
-    
-    What do you choose to do, Mateo?`,
+[Mateo] (a Chinese eccentric CS major with a playful glint in his eyes): "Wow, this place is amazing! So many sights and sounds, it's like a sensory overload. I wonder what kind of adventures I'll have here."
+
+[NARRATOR]: You see a group of merchants huddled together, whispering amongst themselves. One of them seems to be glancing in your direction.
+
+[CHOICES]
+
+1. Approach the merchants and ask what they're talking about.
+2. Ignore them and continue browsing the stalls.
+3. Go back to the inn and rest for the night.
+
+What do you choose to do, Mateo?`,
     messageId: "msg",
     conversationId: "conv"
   }
@@ -44,8 +44,8 @@ app.get('/start', async (req, res) => {
   let allText = result.response
   let dialogues = allText.split('\n\n');
   let charImgs = {};
-  let currDialogue = [];//if length is 4 it has character description. If length is 3 it does not.
-  let currChoices = []; //access first choice at 1
+  let parsedDialogue = [];//if length is 4 it has character description. If length is 3 it does not.
+  let choices = []; //access first choice at 1
   let bgPrompt = /\[BACKGROUND\]: (.*)$/gm.exec(allText)?.[1];
 
   //generate the background
@@ -55,40 +55,52 @@ app.get('/start', async (req, res) => {
   const openai = new OpenAIApi(configuration);
   let bgUrl;
   if (bgPrompt) {
-    const imgResult = await openai.createImage({
-      prompt: bgPrompt,
-      n: 1,
-      size: '1024x1024',
-    });
-    bgUrl = imgResult.data.data[0].url;
+    // const imgResult = await openai.createImage({
+    //   prompt: bgPrompt,
+    //   n: 1,
+    //   size: '1024x1024',
+    // });
+    bgUrl = "imgResult.data.data[0].url";
   } 
 
+  let isProcessingChoices = false;
   for (let dialogue of dialogues) {
-    const dialoguePts = [...dialogue.matchAll(/^\[(.*)\]( \((.*)\)){0,1}: (.*)$/gm)];
-    currChoices = [...dialogue.matchAll(/^\d\. (.*)$/gm)].map(result => result[1]);
-
-    let tempObj;
-    if (dialoguePts.length === 5) {
-      tempObj = { name: dialoguePts[1], description: dialoguePts[3], text: dialoguePts[4] };
-      console.log("AAAAAAAAAAAAA", tempObj.description);
-      //generate the image for the character
-      const charPrompt = `${tempObj.description} with a transparent background`;
-      const imgResult = await openai.createImage({
-        prompt: charPrompt,
-        n: 1,
-        size: '1024x1024',
-      });
-      const url = imgResult.data.data[0].url;
-      charImgs[tempObj.name] = url;
-    } else {
-      tempObj = { name: dialoguePts[1], text: dialoguePts[4] };
+    if (dialogue === "[CHOICES]") {
+      isProcessingChoices = true;
+      continue;
     }
-    currDialogue.push(tempObj);
+    if (isProcessingChoices) {
+      choices = [...dialogue.matchAll(/^\d\. (.*)$/gm)].map(result => result[1]);
+    }
+    if (!isProcessingChoices) {
+      const dialoguePts = [...dialogue.matchAll(/^\[(.*)\]( \((.*)\)){0,1}: (.*)$/gm)][0];
+  
+      let tempObj;
+      console.log(dialoguePts);
+      if (dialoguePts.length === 5) {
+        tempObj = { name: dialoguePts[1], description: dialoguePts[3], text: dialoguePts[4] };
+        console.log("AAAAAAAAAAAAA", tempObj.description);
+        if (tempObj.description) {
+          //generate the image for the character
+          const charPrompt = `${tempObj.description} with a transparent background`;
+          const imgResult = await openai.createImage({
+            prompt: charPrompt,
+            n: 1,
+            size: '1024x1024',
+          });
+          const url = imgResult.data.data[0].url;
+          charImgs[tempObj.name] = url;
+        }
+      } else {
+        tempObj = { name: dialoguePts[1], text: dialoguePts[4] };
+      }
+      parsedDialogue.push(tempObj);
+    }
   }
   
   res.send(JSON.stringify({
-    dialogue: currDialogue,
-    choices: currChoices,
+    dialogue: parsedDialogue,
+    choices: choices,
     background: bgUrl,
     characterImages: charImgs,
     conversationId: result.conversationId,
