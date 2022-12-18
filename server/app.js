@@ -82,7 +82,7 @@ What do you choose to do, Mateo?`,
         console.log("AAAAAAAAAAAAA", tempObj.description);
         if (tempObj.description) {
           //generate the image for the character
-          const charPrompt = `${tempObj.description} with a transparent background`;
+          const charPrompt = `A watercolor painting of ${tempObj.description}, with a transparent background`;
           const imgResult = await openai.createImage({
             prompt: charPrompt,
             n: 1,
