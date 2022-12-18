@@ -21,6 +21,14 @@ body {
   text-align: left; /* Align the text to the left */
 }
 
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+  width: 300px;
+}
+
 .character-name {
   /* Style the character name as desired */
   font-weight: bold;
