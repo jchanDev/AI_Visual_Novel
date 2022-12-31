@@ -7,17 +7,28 @@ body {
   background-size: cover;
 }
 
+header {
+  color: white;
+  text-align: center;
+  font-family: "Goudy Old Style";
+  margin-top: 50px;
+  background-color: rgba(225, 113, 15, 0.85);
+  font-size: 50px;
+}
+
 /* CSS for styling the prompt form */
 form {
-  margin-top: 200px;
+  margin-top: 50px;
   margin-right: auto;
   margin-bottom: 0;
   margin-left: auto;
-  width:200px;
-  padding:20px;
+  width:400px;
+  padding:30px;
   color: white;
   background-color: rgba(0, 0, 0, 0.85);
-  font-size: 20px;
+  font-size: 30px;
+  font-family: "Goudy Old Style";
+  text-align: center;
   /* display: none;
   position: absolute;
   top: 50%;
