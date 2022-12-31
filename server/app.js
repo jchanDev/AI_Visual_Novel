@@ -1,4 +1,4 @@
-import { ChatGPTAPIBrowser } from "chatgpt";
+import { npAPIBrowser } from "chatgpt";
 import express from "express";
 import { Configuration, OpenAIApi } from "openai";
 import * as dotenv from "dotenv";

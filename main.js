@@ -6,29 +6,11 @@ async function fetchStart(evt){
     for (const [key, val] of new FormData(form)) {
         params.append(key, val);
     }
-    const response = await fetch('http://localhost:3000/start?' + params);
-    const data = await response.json();
-    console.log(data);
-    return data;
+    document.getElementById("startMenu").style.display = "none";
+    return;
 }
 
 form.onsubmit = fetchStart;
-
-const openai = new OpenAIApi(configuration);
-
-const prompt = 'a hamster eating a peanut, with a white background';
-
-//const result = await openai.createImage({
-//  prompt,
-//  n: 1,
-//  size: '1024x1024',
-//})
-//
-//const url = result.data.data[0].url;
-//console.log(url);
-
-const url = 'https://t3.ftcdn.net/jpg/02/76/34/74/360_F_276347475_XLF6MQQ1hj85TN2TkfQtMPWju8a8Ktmh.jpg';
-document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${url}">`
 
 let index = 0;
 let characterImages = {};
