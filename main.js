@@ -43,21 +43,22 @@ dialogue_box.addEventListener('click', async () => {
     }
 
     if (index < dialogue.length) {
-        let name = dialogue[index][name];
-        if (name === 'NARRATOR') {
-            name = 'AIVN';
-        }
-        document.querySelector('.character-name').innerHTML = name + ': ';
-        //Display the character that is currently talking
-        if (name !== 'AIVN') {
-        document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages[name]}">`;
+        let characterName = dialogue[index].name;
+        if (characterName === 'NARRATOR') {
+            document.querySelector('.character-name').innerHTML = '';
+            if (index == 0)
+                document.querySelector(".character").innerHTML = '';
+        } else {
+            document.querySelector('.character-name').innerHTML = characterName + ': ';
+            //Display the character that is currently talking
+            document.querySelector(".character").innerHTML = `<img class="character-img" alt="Speaking character" src="${characterImages.name}">`;
         }
 
         document.querySelector('.dialogue-text').innerHTML = '';
         let i = 0;
         const interval = setInterval(function () {
 
-            document.querySelector('.dialogue-text').innerHTML += `${dialogue[index][text][i]}`;
+            document.querySelector('.dialogue-text').innerHTML += `${dialogue[index].text[i]}`;
             i++;
 
             if (i >= dialogue[index][text].length) {
